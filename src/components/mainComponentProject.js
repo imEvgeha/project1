@@ -69,33 +69,41 @@ function MCP() {
   };
 
   return (
-    <div>
-      <h1>Fill new ticket</h1>
-      <form onSubmit={handleSubmit}>
-        <b>
-          Name:
-          <input
-            type="text"
-            onChange={handleChange}
-            value={name}
-            name="name"
-          ></input>
-        </b>
-        <b>
-          Title:
-          <input
-            type="text"
-            onChange={handleChange}
-            value={title}
-            name="title"
-          ></input>
-        </b>
-        <input type="submit"></input>
-      </form>
-      <hr></hr>
-      <div>{addToRepository()}</div>
-      <div>{addToTestField()}</div>
-      <div>{addToReadyField()}</div>
+    <div className="mainComponent">
+      <div className="inputFields">
+        <h1>Fill new ticket</h1>
+
+        <div>
+          <form onSubmit={handleSubmit}>
+            <b>
+              Name:
+              <input
+                type="text"
+                onChange={handleChange}
+                value={name}
+                name="name"
+              ></input>
+            </b>
+            <br></br>
+            <b>
+              Title:
+              <input
+                type="text"
+                onChange={handleChange}
+                value={title}
+                name="title"
+              ></input>
+            </b>
+            <input type="submit"></input>
+          </form>
+        </div>
+        <hr></hr>
+      </div>
+      <div className="fields">
+        <div className="field1">{addToRepository()}</div>
+        <div className="field2">{addToTestField()}</div>
+        <div className="field3">{addToReadyField()}</div>
+      </div>
     </div>
   );
 }

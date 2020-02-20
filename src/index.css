@@ -39,3 +39,23 @@ code {
   margin: 10px;
   padding: 10px;
 }
+
+.mainComponent {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.fields {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  border-right: solid black 1px;
+}
+
+.inputFields {
+  display: flex;
+  flex-direction: column;
+  background-color: wheat;
+  height: 1000px;
+}
