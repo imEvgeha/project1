@@ -1,4 +1,5 @@
 body {
+  display: flexbox;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -10,4 +11,31 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.repository {
+  background-color: thistle;
+  border: solid black 1px;
+  height: 160px;
+  width: 100px;
+  margin: 10px;
+  padding: 10px;
+}
+
+.fieldTest {
+  background-color: rebeccapurple;
+  border: solid black 1px;
+  height: 160px;
+  width: 100px;
+  margin: 10px;
+  padding: 10px;
+}
+
+.ready {
+  background-color: red;
+  border: solid black 1px;
+  height: 160px;
+  width: 100px;
+  margin: 10px;
+  padding: 10px;
 }
