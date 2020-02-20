@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Ticket from './Ticket';
+import MoveTo from '../helpers/MoveTo';
 import AddToField from './AddToField';
 
 function MCP() {
@@ -41,23 +41,11 @@ function MCP() {
   };
 
   const moveToTestField = id => {
-    const neededElem = repository.find(ticket => ticket.id === id);
-    const neededId = repository.indexOf(neededElem);
-    const newRepository = repository.slice();
-    const deleteElem = newRepository[neededId];
-    newRepository.splice(neededId, 1);
-    setRepository(newRepository);
-    setTest([...test, deleteElem]);
+    MoveTo(id, repository, test, setRepository, setTest);
   };
 
   const moveToReadyField = id => {
-    const neededElem = test.find(ticket => ticket.id === id);
-    const neededId = test.indexOf(neededElem);
-    const newTest = test.slice();
-    const deleteElem = newTest[neededId];
-    newTest.splice(neededId, 1);
-    setTest(newTest);
-    setReady([...ready, deleteElem]);
+    MoveTo(id, test, ready, setTest, setReady);
   };
 
   const addToRepository = () => {
