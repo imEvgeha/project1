@@ -48,11 +48,19 @@ function MCP() {
     MoveTo(id, test, ready, setTest, setReady);
   };
 
+  const moveBackToTestField = id => {
+    MoveTo(id, ready, test, setReady, setTest);
+  };
+
+  const moveBackToRepositoryField = id => {
+    MoveTo(id, test, repository, setTest, setRepository);
+  };
+
   const addToRepository = () => {
     return (
       <AddToField
         field={repository}
-        divClassName="repository"
+        divClassName="repository internalProperties"
         btnRightOnClick={moveToTestField}
         btnRight
       />
@@ -63,16 +71,24 @@ function MCP() {
     return (
       <AddToField
         field={test}
-        divClassName="fieldTest"
+        divClassName="fieldTest internalProperties"
         btnRight
         btnRightOnClick={moveToReadyField}
         btnLeft
+        btnLeftOnClick={moveBackToRepositoryField}
       />
     );
   };
 
   const addToReadyField = () => {
-    return <AddToField field={ready} divClassName="ready" btnLeft />;
+    return (
+      <AddToField
+        field={ready}
+        divClassName="ready internalProperties"
+        btnLeft
+        btnLeftOnClick={moveBackToTestField}
+      />
+    );
   };
 
   return (
@@ -101,15 +117,16 @@ function MCP() {
                 name="title"
               ></input>
             </b>
+            <br></br>
             <input type="submit"></input>
           </form>
         </div>
         <hr></hr>
       </div>
       <div className="fields">
-        <div className="field1">{addToRepository()}</div>
-        <div className="field2">{addToTestField()}</div>
-        <div className="field3">{addToReadyField()}</div>
+        <div className="field">{addToRepository()}</div>
+        <div className="field">{addToTestField()}</div>
+        <div className="field">{addToReadyField()}</div>
       </div>
     </div>
   );

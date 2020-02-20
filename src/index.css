@@ -34,6 +34,7 @@ code {
 .ready {
   background-color: red;
   border: solid black 1px;
+
   height: 160px;
   width: 100px;
   margin: 10px;
@@ -47,15 +48,39 @@ code {
 
 .fields {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
   width: 100%;
-  border-right: solid black 1px;
 }
 
 .inputFields {
   display: flex;
   flex-direction: column;
   background-color: wheat;
-  height: 1000px;
+  height: 750px;
+  width: 300px;
+}
+
+.ButtonsDiv {
+  display: flex;
+  position: relative;
+  top: 50%;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column-reverse;
+}
+
+.btnRight {
+  width: 100px;
+}
+.btnLeft {
+  width: 100px;
+}
+
+.field {
+  content: 'max-content';
+  flex-basis: 34%;
+  border-right: solid black 1px;
+  background-color: silver;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
