@@ -10,7 +10,12 @@ const AddToField = props => {
           title={ticket.title}
           timeStamp={ticket.timeStamp}
         />
-        <button onClick={() => props.btnOnClick(ticket.id)}>N</button>
+        {props.btnRight ? (
+          <button onClick={() => props.btnRightOnClick(ticket.id)}>R</button>
+        ) : null}
+        {props.btnLeft ? (
+          <button onClick={() => props.btnLeftOnClick(ticket.id)}>L</button>
+        ) : null}
       </div>
     );
   });

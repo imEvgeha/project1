@@ -45,9 +45,19 @@ function MCP() {
     const neededId = repository.indexOf(neededElem);
     const newRepository = repository.slice();
     const deleteElem = newRepository[neededId];
-    newRepository.splice(Number(neededId), 1);
+    newRepository.splice(neededId, 1);
     setRepository(newRepository);
     setTest([...test, deleteElem]);
+  };
+
+  const moveToReadyField = id => {
+    const neededElem = test.find(ticket => ticket.id === id);
+    const neededId = test.indexOf(neededElem);
+    const newTest = test.slice();
+    const deleteElem = newTest[neededId];
+    newTest.splice(neededId, 1);
+    setTest(newTest);
+    setReady([...ready, deleteElem]);
   };
 
   const addToRepository = () => {
@@ -55,17 +65,26 @@ function MCP() {
       <AddToField
         field={repository}
         divClassName="repository"
-        btnOnClick={moveToTestField}
+        btnRightOnClick={moveToTestField}
+        btnRight
       />
     );
   };
 
   const addToTestField = () => {
-    return <AddToField field={test} divClassName="fieldTest" btnOnClick />;
+    return (
+      <AddToField
+        field={test}
+        divClassName="fieldTest"
+        btnRight
+        btnRightOnClick={moveToReadyField}
+        btnLeft
+      />
+    );
   };
 
   const addToReadyField = () => {
-    return <AddToField field={ready} divClassName="readyd" btnOnClick />;
+    return <AddToField field={ready} divClassName="ready" btnLeft />;
   };
 
   return (
