@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Ticket from './ticket';
+import Ticket from './Ticket';
+import AddToField from './AddToField';
 
 function MCP() {
   // * MCP - Main Component Project
@@ -21,6 +22,8 @@ function MCP() {
     }
   };
 
+  console.log(test);
+
   const handleSubmit = e => {
     e.preventDefault();
     setCount(count + 1);
@@ -41,23 +44,28 @@ function MCP() {
     const neededElem = repository.find(ticket => ticket.id === id);
     const neededId = repository.indexOf(neededElem);
     const newRepository = repository.slice();
+    const deleteElem = newRepository[neededId];
     newRepository.splice(Number(neededId), 1);
     setRepository(newRepository);
+    setTest([...test, deleteElem]);
   };
 
   const addToRepository = () => {
-    return repository.map(ticket => {
-      return (
-        <div className="repository">
-          <Ticket
-            name={ticket.name}
-            title={ticket.title}
-            timeStamp={ticket.timeStamp}
-          />
-          <button onClick={() => moveToTestField(ticket.id)}>N</button>
-        </div>
-      );
-    });
+    return (
+      <AddToField
+        field={repository}
+        divClassName="repository"
+        btnOnClick={moveToTestField}
+      />
+    );
+  };
+
+  const addToTestField = () => {
+    return <AddToField field={test} divClassName="fieldTest" btnOnClick />;
+  };
+
+  const addToReadyField = () => {
+    return <AddToField field={ready} divClassName="readyd" btnOnClick />;
   };
 
   return (
@@ -86,8 +94,8 @@ function MCP() {
       </form>
       <hr></hr>
       <div>{addToRepository()}</div>
-      <div className="fieldTest"></div>
-      <div className="ready"></div>
+      <div>{addToTestField()}</div>
+      <div>{addToReadyField()}</div>
     </div>
   );
 }
