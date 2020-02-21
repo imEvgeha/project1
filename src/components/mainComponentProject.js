@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import MoveTo from '../helpers/MoveTo';
 import AddToField from './AddToField';
+import { DateTime } from 'luxon';
+import WorkField from './WorkField';
+import TicketInfo from './TicketInfo';
 
 function MCP() {
   // * MCP - Main Component Project
@@ -10,6 +13,9 @@ function MCP() {
   const [repository, setRepository] = useState([]);
   const [test, setTest] = useState([]);
   const [ready, setReady] = useState([]);
+  const [clickedOnTicket, setClickedOnTicket] = useState(false);
+  const [someTicket, setSomeTiket] = useState(null);
+  const date = DateTime.local();
 
   const handleChange = e => {
     const value = e.target.value;
@@ -22,8 +28,6 @@ function MCP() {
     }
   };
 
-  console.log(test);
-
   const handleSubmit = e => {
     e.preventDefault();
     setCount(count + 1);
@@ -34,7 +38,7 @@ function MCP() {
       {
         name: name,
         title: title,
-        timeStamp: `${new Date().getHours()}:${new Date().getMinutes()}`,
+        timeStamp: `${date.year} | M: ${date.month} Day: ${date.day} | ${date.hour}:${date.minute}`,
         id: count
       }
     ]);
@@ -61,6 +65,7 @@ function MCP() {
       <AddToField
         field={repository}
         divClassName="repository internalProperties"
+        handleTicketClick={getInfoAboutTicket}
         btnRightOnClick={moveToTestField}
         btnRight
       />
@@ -72,6 +77,7 @@ function MCP() {
       <AddToField
         field={test}
         divClassName="fieldTest internalProperties"
+        handleTicketClick={getInfoAboutTicket}
         btnRight
         btnRightOnClick={moveToReadyField}
         btnLeft
@@ -85,51 +91,57 @@ function MCP() {
       <AddToField
         field={ready}
         divClassName="ready internalProperties"
+        handleTicketClick={getInfoAboutTicket}
         btnLeft
         btnLeftOnClick={moveBackToTestField}
       />
     );
   };
 
-  return (
-    <div className="mainComponent">
-      <div className="inputFields">
-        <h1>Fill new ticket</h1>
+  const getInfoAboutTicket = ticket => {
+    console.log(ticket);
+    setClickedOnTicket(true);
+    setSomeTiket(ticket);
+  };
 
-        <div>
-          <form onSubmit={handleSubmit}>
-            <b>
-              Name:
-              <input
-                type="text"
-                onChange={handleChange}
-                value={name}
-                name="name"
-              ></input>
-            </b>
-            <br></br>
-            <b>
-              Title:
-              <input
-                type="text"
-                onChange={handleChange}
-                value={title}
-                name="title"
-              ></input>
-            </b>
-            <br></br>
-            <input type="submit"></input>
-          </form>
-        </div>
-        <hr></hr>
+  const closeInfoAboutTicket = () => {
+    setClickedOnTicket(false);
+    setSomeTiket(null);
+  };
+
+  if (clickedOnTicket) {
+    return (
+      <div>
+        <WorkField
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          name={name}
+          title={title}
+          fillingField1={addToRepository()}
+          fillingField2={addToTestField()}
+          fillingField3={addToReadyField()}
+        />
+        <TicketInfo
+          name={someTicket.name}
+          title={someTicket.title}
+          timeStamp={someTicket.timeStamp}
+          closeInfo={closeInfoAboutTicket}
+        />
       </div>
-      <div className="fields">
-        <div className="field">{addToRepository()}</div>
-        <div className="field">{addToTestField()}</div>
-        <div className="field">{addToReadyField()}</div>
-      </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <WorkField
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        name={name}
+        title={title}
+        fillingField1={addToRepository()}
+        fillingField2={addToTestField()}
+        fillingField3={addToReadyField()}
+      />
+    );
+  }
 }
 
 export default MCP;

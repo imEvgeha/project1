@@ -44,6 +44,8 @@ code {
 .mainComponent {
   display: flex;
   justify-content: flex-start;
+  height: 100%;
+  width: 100%;
 }
 
 .fields {
@@ -55,16 +57,13 @@ code {
   display: flex;
   flex-direction: column;
   background-color: wheat;
-  height: 750px;
+  height: 730px;
   width: 300px;
 }
 
 .ButtonsDiv {
-  display: flex;
-  position: relative;
-  top: 50%;
-  justify-content: space-between;
-  align-items: center;
+  display: flexbox;
+  align-items: flex-end;
   flex-direction: column-reverse;
 }
 
@@ -83,4 +82,33 @@ code {
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+
+.backgroundInfo {
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(70, 69, 69, 0.8);
+}
+
+.info {
+  background-color: white;
+  position: absolute;
+  display: flex;
+
+  flex-direction: column;
+  height: 500px;
+  width: 50%;
+}
+
+.internalProperties {
+  display: flexbox;
+  justify-content: end;
+  flex-direction: column;
+  align-items: center;
 }

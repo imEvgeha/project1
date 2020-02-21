@@ -1,11 +1,17 @@
 import React from 'react';
-import Ticket from './Ticket';
+import TicketComponent from './Ticket';
 
 const AddToField = props => {
   return props.field.map(ticket => {
     return (
-      <div className={props.divClassName}>
-        <Ticket
+      <div
+        className={props.divClassName}
+        onClick={e => {
+          console.log(e.target.tagName);
+          if (e.target.tagName !== 'BUTTON') props.handleTicketClick(ticket);
+        }}
+      >
+        <TicketComponent
           name={ticket.name}
           title={ticket.title}
           timeStamp={ticket.timeStamp}
