@@ -26,8 +26,6 @@ function MCP() {
     setReady(...test, JSON.parse(localStorage.getItem('ready')));
   }, []);
 
-  console.log(localStorage);
-
   const handleChange = e => {
     const value = e.target.value;
     const name = e.target.name;
@@ -60,8 +58,6 @@ function MCP() {
       }
     ]);
   };
-
-  console.log('bla');
 
   useEffect(() => {
     localStorage.setItem('repository', JSON.stringify(repository));
