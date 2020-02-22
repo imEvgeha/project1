@@ -17,6 +17,17 @@ function MCP() {
   const [clickedOnTicket, setClickedOnTicket] = useState(null);
   const date = DateTime.local();
 
+  useEffect(() => {
+    setRepository(
+      ...repository,
+      JSON.parse(localStorage.getItem('repository'))
+    );
+    setTest(...test, JSON.parse(localStorage.getItem('test')));
+    setReady(...test, JSON.parse(localStorage.getItem('ready')));
+  }, []);
+
+  console.log(localStorage);
+
   const handleChange = e => {
     const value = e.target.value;
     const name = e.target.name;
@@ -49,6 +60,14 @@ function MCP() {
       }
     ]);
   };
+
+  console.log('bla');
+
+  useEffect(() => {
+    localStorage.setItem('repository', JSON.stringify(repository));
+    localStorage.setItem('test', JSON.stringify(test));
+    localStorage.setItem('ready', JSON.stringify(ready));
+  });
 
   const moveToTestField = id => {
     MoveTo(id, repository, test, setRepository, setTest, 'test');
@@ -132,8 +151,10 @@ function MCP() {
   };
 
   if (clickedOnTicket) {
+    const elem = document.querySelector('html');
+    elem.classList.add('stopScrolling');
     return (
-      <div>
+      <div className="mainDiv">
         <WorkField
           handleChange={handleChange}
           handleSubmit={handleSubmit}
@@ -155,16 +176,20 @@ function MCP() {
       </div>
     );
   } else {
+    const elem = document.querySelector('html');
+    elem.classList.remove('stopScrolling');
     return (
-      <WorkField
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-        name={name}
-        title={title}
-        fillingField1={addToRepository()}
-        fillingField2={addToTestField()}
-        fillingField3={addToReadyField()}
-      />
+      <div className="mainDiv">
+        <WorkField
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          name={name}
+          title={title}
+          fillingField1={addToRepository()}
+          fillingField2={addToTestField()}
+          fillingField3={addToReadyField()}
+        />
+      </div>
     );
   }
 }

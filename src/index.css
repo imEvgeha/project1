@@ -1,4 +1,6 @@
 body {
+  height: 100%;
+  width: 100%;
   display: flexbox;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -41,9 +43,16 @@ code {
   padding: 10px;
 }
 
+.mainDiv {
+  height: 100%;
+}
+
 .mainComponent {
+  position: absolute;
   display: flex;
   justify-content: flex-start;
+  position: absolute;
+
   height: 100%;
   width: 100%;
 }
@@ -58,8 +67,9 @@ code {
   flex-direction: column;
   align-items: center;
   background-color: whitesmoke;
-  height: 730px;
-  width: 300px;
+  position: absolute;
+  height: 100%;
+  width: 20%;
 }
 
 .ButtonsDiv {
@@ -76,9 +86,11 @@ code {
 }
 
 .field {
+  position: relative;
+  left: 20%;
   content: 'max-content';
-  flex-basis: 34%;
-  border-right: dashed black 1px;
+  flex-basis: 27%;
+  border-right: dashed rgb(211, 211, 211) 1px;
   background-color: white;
   display: flex;
   align-items: center;
@@ -115,4 +127,8 @@ code {
   flex-direction: column;
   align-items: center;
   border-radius: 4px;
+}
+
+.stopScrolling {
+  overflow: hidden;
 }
