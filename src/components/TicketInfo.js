@@ -16,7 +16,7 @@ const TicketInfo = props => {
         <h>{props.title}</h>
         <br></br>
         <h3>{props.timeStamp}</h3>
-        <button onClick={props.deleteBtn}>Delete</button>
+        <button onClick={() => props.deleteBtn(props.ticket)}>Delete</button>
       </div>
     </div>
   );

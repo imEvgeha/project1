@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TicketComponent from './Ticket';
 
 const AddToField = props => {
@@ -7,7 +7,6 @@ const AddToField = props => {
       <div
         className={props.divClassName}
         onClick={e => {
-          console.log(e.target.tagName);
           if (e.target.tagName !== 'BUTTON') props.handleTicketClick(ticket);
         }}
       >
@@ -19,7 +18,9 @@ const AddToField = props => {
         <div className="ButtonsDiv">
           {props.btnLeft ? (
             <button
-              onClick={() => props.btnLeftOnClick(ticket.id)}
+              onClick={() => {
+                props.btnLeftOnClick(ticket.id);
+              }}
               className="btnLeft"
             >
               L
@@ -27,7 +28,9 @@ const AddToField = props => {
           ) : null}
           {props.btnRight ? (
             <button
-              onClick={() => props.btnRightOnClick(ticket.id)}
+              onClick={() => {
+                props.btnRightOnClick(ticket.id);
+              }}
               className="btnRight"
             >
               R

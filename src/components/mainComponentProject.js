@@ -13,8 +13,8 @@ function MCP() {
   const [repository, setRepository] = useState([]);
   const [test, setTest] = useState([]);
   const [ready, setReady] = useState([]);
-  const [clickedOnTicket, setClickedOnTicket] = useState(false);
   const [someTicket, setSomeTiket] = useState(null);
+  const [clickedOnTicket, setClickedOnTicket] = useState(null);
   const date = DateTime.local();
 
   const handleChange = e => {
@@ -99,7 +99,6 @@ function MCP() {
   };
 
   const getInfoAboutTicket = ticket => {
-    console.log(ticket);
     setClickedOnTicket(true);
     setSomeTiket(ticket);
   };
@@ -107,6 +106,28 @@ function MCP() {
   const closeInfoAboutTicket = () => {
     setClickedOnTicket(false);
     setSomeTiket(null);
+  };
+
+  const deleteTicket = ticket => {
+    let ticketIdRep = repository.find(item => {
+      return item === ticket;
+    });
+    let ticketIdTest = test.find(item => {
+      return item === ticket;
+    });
+    let ticketIdReady = ready.find(item => {
+      return item === ticket;
+    });
+    if (ticketIdRep) {
+      repository.splice(ticketIdRep, 1);
+    }
+    if (ticketIdTest) {
+      test.splice(ticketIdTest, 1);
+    }
+    if (ticketIdReady) {
+      ready.splice(ticketIdReady, 1);
+    }
+    setClickedOnTicket(false);
   };
 
   if (clickedOnTicket) {
@@ -122,10 +143,12 @@ function MCP() {
           fillingField3={addToReadyField()}
         />
         <TicketInfo
+          ticket={someTicket}
           name={someTicket.name}
           title={someTicket.title}
           timeStamp={someTicket.timeStamp}
           closeInfo={closeInfoAboutTicket}
+          deleteBtn={deleteTicket}
         />
       </div>
     );
