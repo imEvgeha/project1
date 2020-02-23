@@ -1,3 +1,5 @@
+import getInterval from '../helpers/getInterval';
+
 const MoveTo = (id, neededElem, elemPush, set1, set2, where) => {
   console.log(id);
   const elem = neededElem.find(ticket => ticket.id === id);

@@ -14,18 +14,9 @@ const AddToField = props => {
           name={ticket.name}
           title={ticket.title}
           timeStamp={ticket.timeStamp}
+          text={ticket.text}
         />
         <div className="ButtonsDiv">
-          {props.btnLeft ? (
-            <button
-              onClick={() => {
-                props.btnLeftOnClick(ticket.id);
-              }}
-              className="btnLeft"
-            >
-              L
-            </button>
-          ) : null}
           {props.btnRight ? (
             <button
               onClick={() => {
@@ -34,6 +25,16 @@ const AddToField = props => {
               className="btnRight"
             >
               R
+            </button>
+          ) : null}
+          {props.btnLeft ? (
+            <button
+              onClick={() => {
+                props.btnLeftOnClick(ticket.id);
+              }}
+              className="btnLeft"
+            >
+              L
             </button>
           ) : null}
         </div>

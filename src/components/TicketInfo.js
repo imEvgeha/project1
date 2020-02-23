@@ -27,7 +27,7 @@ const TicketInfo = props => {
         <br></br>
         <h>Title: {props.title}</h>
         <br></br>
-        <h3>Creating time: {props.timeStamp}</h3>
+        <h3>Creating time: {props.text}</h3>
         <br></br>
         <b>Status: {getStatus(props.status)}</b>
         <p></p>

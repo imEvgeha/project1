@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MoveTo from '../helpers/MoveTo';
 import AddToField from './AddToField';
 import { DateTime } from 'luxon';
+import getInterval from '../helpers/getInterval';
 import WorkField from './WorkField';
 import TicketInfo from './TicketInfo';
 
@@ -15,15 +16,14 @@ function MCP() {
   const [ready, setReady] = useState([]);
   const [someTicket, setSomeTiket] = useState(null);
   const [clickedOnTicket, setClickedOnTicket] = useState(null);
-  const date = DateTime.local();
+
+  useEffect(() => {});
 
   useEffect(() => {
-    setRepository(
-      ...repository,
-      JSON.parse(localStorage.getItem('repository'))
-    );
-    setTest(...test, JSON.parse(localStorage.getItem('test')));
-    setReady(...test, JSON.parse(localStorage.getItem('ready')));
+    setRepository(JSON.parse(localStorage.getItem('repository')));
+    setTest(JSON.parse(localStorage.getItem('test')));
+    setReady(JSON.parse(localStorage.getItem('ready')));
+    setCount(JSON.parse(localStorage.getItem('count')));
   }, []);
 
   const handleChange = e => {
@@ -37,8 +37,14 @@ function MCP() {
     }
   };
 
+  const getTime = time => {
+    return getInterval(time);
+  };
+
   const handleSubmit = e => {
     e.preventDefault();
+    const timeStamp = new Date().getTime();
+
     if (name === '') {
       setTitle(title);
       alert('ERROR - Name field is required');
@@ -52,8 +58,9 @@ function MCP() {
       {
         name: name,
         title: title,
-        timeStamp: `${date.year} | M: ${date.month} Day: ${date.day} | ${date.hour}:${date.minute}`,
+        timeStamp,
         id: count,
+        text: getTime(timeStamp),
         field: 'repository'
       }
     ]);
@@ -63,6 +70,7 @@ function MCP() {
     localStorage.setItem('repository', JSON.stringify(repository));
     localStorage.setItem('test', JSON.stringify(test));
     localStorage.setItem('ready', JSON.stringify(ready));
+    localStorage.setItem('count', JSON.stringify(count));
   });
 
   const moveToTestField = id => {
@@ -89,6 +97,7 @@ function MCP() {
         handleTicketClick={getInfoAboutTicket}
         btnRightOnClick={moveToTestField}
         btnRight
+        // getIntervalTime={getTime}
       />
     );
   };
@@ -103,6 +112,7 @@ function MCP() {
         btnRightOnClick={moveToReadyField}
         btnLeft
         btnLeftOnClick={moveBackToRepositoryField}
+        // getIntervalTime={getTime}
       />
     );
   };
@@ -115,6 +125,7 @@ function MCP() {
         handleTicketClick={getInfoAboutTicket}
         btnLeft
         btnLeftOnClick={moveBackToTestField}
+        // getIntervalTime={getTime}
       />
     );
   };
@@ -149,18 +160,25 @@ function MCP() {
   if (clickedOnTicket) {
     const elem = document.querySelector('html');
     elem.classList.add('stopScrolling');
-    return (
-      <div className="mainDiv">
-        <WorkField
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          name={name}
-          title={title}
-          fillingField1={addToRepository()}
-          fillingField2={addToTestField()}
-          fillingField3={addToReadyField()}
-        />
+  } else {
+    const elem = document.querySelector('html');
+    elem.classList.remove('stopScrolling');
+  }
+
+  return (
+    <div className="mainDiv">
+      <WorkField
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        name={name}
+        title={title}
+        fillingField1={addToRepository()}
+        fillingField2={addToTestField()}
+        fillingField3={addToReadyField()}
+      />
+      {clickedOnTicket && (
         <TicketInfo
+          text={someTicket.text}
           ticket={someTicket}
           name={someTicket.name}
           title={someTicket.title}
@@ -168,26 +186,11 @@ function MCP() {
           closeInfo={closeInfoAboutTicket}
           deleteBtn={deleteTicket}
           status={someTicket.field}
+          // getIntervalTime={getTime}
         />
-      </div>
-    );
-  } else {
-    const elem = document.querySelector('html');
-    elem.classList.remove('stopScrolling');
-    return (
-      <div className="mainDiv">
-        <WorkField
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-          name={name}
-          title={title}
-          fillingField1={addToRepository()}
-          fillingField2={addToTestField()}
-          fillingField3={addToReadyField()}
-        />
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
 }
 
 export default MCP;
