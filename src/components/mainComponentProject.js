@@ -97,7 +97,6 @@ function MCP() {
         handleTicketClick={getInfoAboutTicket}
         btnRightOnClick={moveToTestField}
         btnRight
-        // getIntervalTime={getTime}
       />
     );
   };
@@ -112,7 +111,6 @@ function MCP() {
         btnRightOnClick={moveToReadyField}
         btnLeft
         btnLeftOnClick={moveBackToRepositoryField}
-        // getIntervalTime={getTime}
       />
     );
   };
@@ -125,7 +123,6 @@ function MCP() {
         handleTicketClick={getInfoAboutTicket}
         btnLeft
         btnLeftOnClick={moveBackToTestField}
-        // getIntervalTime={getTime}
       />
     );
   };
@@ -186,7 +183,6 @@ function MCP() {
           closeInfo={closeInfoAboutTicket}
           deleteBtn={deleteTicket}
           status={someTicket.field}
-          // getIntervalTime={getTime}
         />
       )}
     </div>

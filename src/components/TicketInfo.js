@@ -1,6 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import getInterval from '../helpers/getInterval';
 
 const TicketInfo = props => {
+  const [_state, setState] = useState({});
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setState({});
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   const getStatus = status => {
     if (status === 'repository') {
       return 'In developing...';
@@ -27,7 +40,7 @@ const TicketInfo = props => {
         <br></br>
         <h>Title: {props.title}</h>
         <br></br>
-        <h3>Creating time: {props.text}</h3>
+        <h3>Creating time: {getInterval(props.timeStamp)}</h3>
         <br></br>
         <b>Status: {getStatus(props.status)}</b>
         <p></p>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { DateTime } from 'luxon';
 import getInterval from '../helpers/getInterval';
 
 const Ticket = props => {
@@ -29,9 +28,7 @@ const Ticket = props => {
     <div className="textOfTicket">
       <b>{helperText(props.name, 'name')}</b>
       <br></br>
-      <p></p>
       <h>{helperText(props.title, 'title')}</h>
-      <br></br>
       <p></p>
       <h>{getInterval(props.timeStamp)}</h>
       {props.child}
