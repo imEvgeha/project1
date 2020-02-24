@@ -42,6 +42,7 @@ const TicketInfo = props => {
         <br></br>
         <h3>Creating time: {getInterval(props.timeStamp)}</h3>
         <br></br>
+        <br></br>
         <b>Status: {getStatus(props.status)}</b>
         <p></p>
         <button onClick={() => props.deleteBtn(props.ticket)}>Delete</button>

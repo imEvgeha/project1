@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MoveTo from '../helpers/MoveTo';
 import AddToField from './AddToField';
-import { DateTime } from 'luxon';
 import getInterval from '../helpers/getInterval';
 import WorkField from './WorkField';
 import TicketInfo from './TicketInfo';
@@ -16,8 +15,6 @@ function MCP() {
   const [ready, setReady] = useState([]);
   const [someTicket, setSomeTiket] = useState(null);
   const [clickedOnTicket, setClickedOnTicket] = useState(null);
-
-  useEffect(() => {});
 
   useEffect(() => {
     setRepository(JSON.parse(localStorage.getItem('repository')));
@@ -137,19 +134,19 @@ function MCP() {
     setSomeTiket(null);
   };
 
-  const deleteTicket = ticket => {
-    const findInArr = field => {
-      return field.indexOf(ticket);
-    };
+  const findInArr = (field, ticket) => {
+    return field.indexOf(ticket);
+  };
 
+  const deleteTicket = ticket => {
     if (ticket.field === 'repository') {
-      repository.splice(findInArr(repository), 1);
+      repository.splice(findInArr(repository, ticket), 1);
     }
     if (ticket.field === 'test') {
-      test.splice(findInArr(test), 1);
+      test.splice(findInArr(test, ticket), 1);
     }
     if (ticket.field === 'ready') {
-      ready.splice(findInArr(ready), 1);
+      ready.splice(findInArr(ready, ticket), 1);
     }
     setClickedOnTicket(false);
   };
@@ -162,6 +159,35 @@ function MCP() {
     elem.classList.remove('stopScrolling');
   }
 
+  const transformField = field => {
+    if (field === 'repository') return repository;
+    if (field === 'test') return test;
+    if (field === 'ready') return ready;
+  };
+
+  const drag_n_drop = e => {
+    e.preventDefault();
+    const ticket_copy = JSON.parse(e.dataTransfer.getData('card_id'));
+    const currentField = transformField(ticket_copy.field);
+    if (e.target.id === 'repository') {
+      ticket_copy.field = 'repository';
+      setRepository([...repository, ticket_copy]);
+    }
+    if (e.target.id === 'test') {
+      ticket_copy.field = 'test';
+      setTest([...test, ticket_copy]);
+    }
+    if (e.target.id === 'ready') {
+      ticket_copy.field = 'ready';
+      setReady([...ready, ticket_copy]);
+    }
+    currentField.splice(findInArr(currentField, ticket_copy), 1);
+  };
+
+  const dragOver = e => {
+    e.preventDefault();
+  };
+
   return (
     <div className="mainDiv">
       <WorkField
@@ -172,6 +198,8 @@ function MCP() {
         fillingField1={addToRepository()}
         fillingField2={addToTestField()}
         fillingField3={addToReadyField()}
+        onDrop={drag_n_drop}
+        onDragOver={dragOver}
       />
       {clickedOnTicket && (
         <TicketInfo

@@ -33,9 +33,30 @@ const WorkField = props => {
         </div>
       </div>
       <div className="fields">
-        <div className="field">{props.fillingField1}</div>
-        <div className="field">{props.fillingField2}</div>
-        <div className="field">{props.fillingField3}</div>
+        <div
+          className="field"
+          onDrop={props.onDrop}
+          onDragOver={props.onDragOver}
+          id="repository"
+        >
+          {props.fillingField1}
+        </div>
+        <div
+          className="field"
+          onDrop={props.onDrop}
+          onDragOver={props.onDragOver}
+          id="test"
+        >
+          {props.fillingField2}
+        </div>
+        <div
+          className="field"
+          onDrop={props.onDrop}
+          onDragOver={props.onDragOver}
+          id="ready"
+        >
+          {props.fillingField3}
+        </div>
       </div>
     </div>
   );
