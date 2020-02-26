@@ -1,24 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TicketComponent from './Ticket';
-import { useDrag } from 'react-dnd';
-// const definesType = {
-//   TICKET: 'ticket'
-// };
 
 const AddToField = props => {
   return props.field.map(ticket => {
-    const dragStart = e => {
-      const target = e.target;
-
-      e.dataTransfer.setData('card_id', JSON.stringify(ticket));
+    const dragStart = elem => {
+      const target = elem.target;
+      elem.dataTransfer.setData('card_id', JSON.stringify(ticket));
 
       setTimeout(() => {
         target.style.display = 'none';
       }, 0);
     };
 
-    const dragOver = e => {
-      e.stopPropagation();
+    const dragOver = elem => {
+      elem.stopPropagation();
     };
 
     return (

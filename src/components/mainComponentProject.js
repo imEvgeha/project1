@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import MoveTo from '../helpers/MoveTo';
 import AddToField from './AddToField';
-import getInterval from '../helpers/getInterval';
 import WorkField from './WorkField';
 import TicketInfo from './TicketInfo';
 
-function MCP() {
-  // * MCP - Main Component Project
+function MPC() {
+  // * MCP - Main Project Component
   const [name, setName] = useState('');
   const [title, setTitle] = useState('');
   const [count, setCount] = useState(0);
   const [repository, setRepository] = useState([]);
   const [test, setTest] = useState([]);
   const [ready, setReady] = useState([]);
-  const [someTicket, setSomeTiket] = useState(null);
+  const [ticketCopy, setTicketCopy] = useState(null);
   const [clickedOnTicket, setClickedOnTicket] = useState(null);
 
   useEffect(() => {
@@ -32,10 +31,6 @@ function MCP() {
     if (name === 'title') {
       setTitle(value);
     }
-  };
-
-  const getTime = time => {
-    return getInterval(time);
   };
 
   const handleSubmit = e => {
@@ -57,7 +52,6 @@ function MCP() {
         title: title,
         timeStamp,
         id: count,
-        text: getTime(timeStamp),
         field: 'repository'
       }
     ]);
@@ -126,12 +120,12 @@ function MCP() {
 
   const getInfoAboutTicket = ticket => {
     setClickedOnTicket(true);
-    setSomeTiket(ticket);
+    setTicketCopy(ticket);
   };
 
   const closeInfoAboutTicket = () => {
     setClickedOnTicket(false);
-    setSomeTiket(null);
+    setTicketCopy(null);
   };
 
   const findInArr = (field, ticket) => {
@@ -151,6 +145,55 @@ function MCP() {
     setClickedOnTicket(false);
   };
 
+  const getTransformField = field => {
+    if (field === 'repository') return repository;
+    if (field === 'test') return test;
+    if (field === 'ready') return ready;
+  };
+
+  // const getTransformSetField = field => {
+  //   if (field === 'repository') return setRepository;
+  //   if (field === 'test') return setTest;
+  //   if (field === 'ready') return setReady;
+  // };
+
+  const drag_n_drop = e => {
+    e.preventDefault();
+    const ticketCopy = JSON.parse(e.dataTransfer.getData('card_id'));
+    const currentField = getTransformField(ticketCopy.field);
+
+    const deleteUnnecessaryElem = (current_field, ticket_copy) => {
+      const unnecessaryElem = current_field.find(
+        elem => elem.id === ticket_copy.id
+      );
+      current_field.map(elem => {
+        const unnecessaryElemID = current_field.indexOf(unnecessaryElem);
+
+        if (elem.id === ticket_copy.id) {
+          current_field.splice(unnecessaryElemID, 1);
+        }
+      });
+    };
+
+    if (e.target.id === 'repository') {
+      ticketCopy.field = 'repository';
+      setRepository([...repository, ticketCopy]);
+    }
+    if (e.target.id === 'test') {
+      ticketCopy.field = 'test';
+      setTest([...test, ticketCopy]);
+    }
+    if (e.target.id === 'ready') {
+      ticketCopy.field = 'ready';
+      setReady([...ready, ticketCopy]);
+    }
+    deleteUnnecessaryElem(currentField, ticketCopy);
+  };
+
+  const drag_n_dropOver = e => {
+    e.preventDefault();
+  };
+
   if (clickedOnTicket) {
     const elem = document.querySelector('html');
     elem.classList.add('stopScrolling');
@@ -158,35 +201,6 @@ function MCP() {
     const elem = document.querySelector('html');
     elem.classList.remove('stopScrolling');
   }
-
-  const transformField = field => {
-    if (field === 'repository') return repository;
-    if (field === 'test') return test;
-    if (field === 'ready') return ready;
-  };
-
-  const drag_n_drop = e => {
-    e.preventDefault();
-    const ticket_copy = JSON.parse(e.dataTransfer.getData('card_id'));
-    const currentField = transformField(ticket_copy.field);
-    if (e.target.id === 'repository') {
-      ticket_copy.field = 'repository';
-      setRepository([...repository, ticket_copy]);
-    }
-    if (e.target.id === 'test') {
-      ticket_copy.field = 'test';
-      setTest([...test, ticket_copy]);
-    }
-    if (e.target.id === 'ready') {
-      ticket_copy.field = 'ready';
-      setReady([...ready, ticket_copy]);
-    }
-    currentField.splice(findInArr(currentField, ticket_copy), 1);
-  };
-
-  const dragOver = e => {
-    e.preventDefault();
-  };
 
   return (
     <div className="mainDiv">
@@ -199,22 +213,22 @@ function MCP() {
         fillingField2={addToTestField()}
         fillingField3={addToReadyField()}
         onDrop={drag_n_drop}
-        onDragOver={dragOver}
+        onDragOver={drag_n_dropOver}
       />
       {clickedOnTicket && (
         <TicketInfo
-          text={someTicket.text}
-          ticket={someTicket}
-          name={someTicket.name}
-          title={someTicket.title}
-          timeStamp={someTicket.timeStamp}
+          text={ticketCopy.text}
+          ticket={ticketCopy}
+          name={ticketCopy.name}
+          title={ticketCopy.title}
+          timeStamp={ticketCopy.timeStamp}
           closeInfo={closeInfoAboutTicket}
           deleteBtn={deleteTicket}
-          status={someTicket.field}
+          status={ticketCopy.field}
         />
       )}
     </div>
   );
 }
 
-export default MCP;
+export default MPC;

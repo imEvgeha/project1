@@ -1,12 +1,19 @@
-const MoveTo = (id, neededElem, elemPush, set1, set2, where) => {
-  const elem = neededElem.find(ticket => ticket.id === id);
-  const neededId = neededElem.indexOf(elem);
-  const newNeededElem = neededElem.slice();
-  const deletedElem = newNeededElem[neededId];
-  newNeededElem.splice(neededId, 1);
-  set1(newNeededElem);
-  set2([...elemPush, deletedElem]);
-  elem.field = where;
+const MoveTo = (
+  id,
+  currentField,
+  whereField,
+  setCurrentField,
+  setWhereField,
+  whereTitle
+) => {
+  const elem = currentField.find(ticket => ticket.id === id);
+  const elemId = currentField.indexOf(elem);
+  const newCurrentField = currentField.slice();
+  const deletedElem = newCurrentField[elemId];
+  newCurrentField.splice(elemId, 1);
+  setCurrentField(newCurrentField);
+  setWhereField([...whereField, deletedElem]);
+  elem.field = whereTitle;
 };
 
 export default MoveTo;
