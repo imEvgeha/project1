@@ -1,5 +1,5 @@
 import React from 'react';
-import TicketComponent from './Ticket';
+import TicketComponent from './ticket';
 import { Draggable } from 'react-beautiful-dnd';
 
 const AddToField = props => {
