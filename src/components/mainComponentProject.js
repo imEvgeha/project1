@@ -198,6 +198,8 @@ function MPC() {
     <div className="mainDiv">
       <DragDropContext
         onDragEnd={result => {
+          if (!result.destination) return;
+          if (!result.source) return;
           const getDroppableField = getTransformField(
             result.destination.droppableId
           );
