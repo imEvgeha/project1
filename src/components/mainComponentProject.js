@@ -192,6 +192,8 @@ function MPC() {
     }
   };
 
+  console.log(localStorage);
+
   return (
     <div className="mainDiv">
       <DragDropContext

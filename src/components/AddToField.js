@@ -2,6 +2,18 @@ import React from 'react';
 import TicketComponent from './ticket';
 import { Draggable } from 'react-beautiful-dnd';
 
+const getStatus = status => {
+  if (status === 'repository') {
+    return 'In developing...';
+  }
+  if (status === 'test') {
+    return 'In testing...';
+  }
+  if (status === 'ready') {
+    return 'Ready';
+  }
+};
+
 const AddToField = props => {
   return props.field.map((ticket, index) => {
     return (
@@ -47,7 +59,7 @@ const AddToField = props => {
                   </button>
                 ) : null}
               </div>
-              {props.children}
+              <h4>Status: {getStatus(ticket.field)}</h4>
             </div>
           );
         }}

@@ -131,9 +131,15 @@ code {
   display: flexbox;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   border-radius: 4px;
 }
 
 .stopScrolling {
   overflow: hidden;
+}
+
+.ticketStatus {
+  display: flex;
+  text-align: center;
 }
