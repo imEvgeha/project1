@@ -3,6 +3,7 @@ import MoveTo from '../helpers/MoveTo';
 import AddToField from './AddToField';
 import WorkField from './WorkField';
 import TicketInfo from './TicketInfo';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 function MPC() {
   // * MCP - Main Project Component
@@ -145,55 +146,6 @@ function MPC() {
     setClickedOnTicket(false);
   };
 
-  const getTransformField = field => {
-    if (field === 'repository') return repository;
-    if (field === 'test') return test;
-    if (field === 'ready') return ready;
-  };
-
-  // const getTransformSetField = field => {
-  //   if (field === 'repository') return setRepository;
-  //   if (field === 'test') return setTest;
-  //   if (field === 'ready') return setReady;
-  // };
-
-  const drag_n_drop = e => {
-    e.preventDefault();
-    const ticketCopy = JSON.parse(e.dataTransfer.getData('card_id'));
-    const currentField = getTransformField(ticketCopy.field);
-
-    const deleteUnnecessaryElem = (current_field, ticket_copy) => {
-      const unnecessaryElem = current_field.find(
-        elem => elem.id === ticket_copy.id
-      );
-      current_field.map(elem => {
-        const unnecessaryElemID = current_field.indexOf(unnecessaryElem);
-
-        if (elem.id === ticket_copy.id) {
-          current_field.splice(unnecessaryElemID, 1);
-        }
-      });
-    };
-
-    if (e.target.id === 'repository') {
-      ticketCopy.field = 'repository';
-      setRepository([...repository, ticketCopy]);
-    }
-    if (e.target.id === 'test') {
-      ticketCopy.field = 'test';
-      setTest([...test, ticketCopy]);
-    }
-    if (e.target.id === 'ready') {
-      ticketCopy.field = 'ready';
-      setReady([...ready, ticketCopy]);
-    }
-    deleteUnnecessaryElem(currentField, ticketCopy);
-  };
-
-  const drag_n_dropOver = e => {
-    e.preventDefault();
-  };
-
   if (clickedOnTicket) {
     const elem = document.querySelector('html');
     elem.classList.add('stopScrolling');
@@ -202,31 +154,93 @@ function MPC() {
     elem.classList.remove('stopScrolling');
   }
 
+  const getTransformField = field => {
+    if (field === 'repository') return repository;
+    if (field === 'test') return test;
+    if (field === 'ready') return ready;
+  };
+
+  const getTransformSetField = field => {
+    if (field === 'repository') return setRepository;
+    if (field === 'test') return setTest;
+    if (field === 'ready') return setReady;
+  };
+
+  const onDragEnd = (
+    result,
+    oldField,
+    oldSetField,
+    setNewField,
+    newField,
+    where
+  ) => {
+    if (!result.destination) return;
+    const { source, destination } = result;
+    if (source.droppableId !== destination.droppableId) {
+      const sourceColumn = oldField.slice();
+      const destColumn = newField.slice();
+      const [removed] = sourceColumn.splice(source.index, 1);
+      removed.field = where;
+      destColumn.splice(destination.index, 0, removed);
+      setNewField(destColumn);
+      oldSetField(sourceColumn);
+    } else {
+      const copiesItems = [...oldField];
+      const [removed] = copiesItems.splice(source.index, 1);
+      copiesItems.splice(destination.index, 0, removed);
+      oldSetField(copiesItems);
+    }
+  };
+
   return (
     <div className="mainDiv">
-      <WorkField
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-        name={name}
-        title={title}
-        fillingField1={addToRepository()}
-        fillingField2={addToTestField()}
-        fillingField3={addToReadyField()}
-        onDrop={drag_n_drop}
-        onDragOver={drag_n_dropOver}
-      />
-      {clickedOnTicket && (
-        <TicketInfo
-          text={ticketCopy.text}
-          ticket={ticketCopy}
-          name={ticketCopy.name}
-          title={ticketCopy.title}
-          timeStamp={ticketCopy.timeStamp}
-          closeInfo={closeInfoAboutTicket}
-          deleteBtn={deleteTicket}
-          status={ticketCopy.field}
+      <DragDropContext
+        onDragEnd={result => {
+          const getDroppableField = getTransformField(
+            result.destination.droppableId
+          );
+          const setDroppableField = getTransformSetField(
+            result.destination.droppableId
+          );
+          const getOldDroppableField = getTransformField(
+            result.source.droppableId
+          );
+          const oldSetDroppableField = getTransformSetField(
+            result.source.droppableId
+          );
+
+          onDragEnd(
+            result,
+            getOldDroppableField,
+            oldSetDroppableField,
+            setDroppableField,
+            getDroppableField,
+            result.destination.droppableId
+          );
+        }}
+      >
+        <WorkField
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          name={name}
+          title={title}
+          fillingField1={addToRepository()}
+          fillingField2={addToTestField()}
+          fillingField3={addToReadyField()}
         />
-      )}
+        {clickedOnTicket && (
+          <TicketInfo
+            text={ticketCopy.text}
+            ticket={ticketCopy}
+            name={ticketCopy.name}
+            title={ticketCopy.title}
+            timeStamp={ticketCopy.timeStamp}
+            closeInfo={closeInfoAboutTicket}
+            deleteBtn={deleteTicket}
+            status={ticketCopy.field}
+          />
+        )}
+      </DragDropContext>
     </div>
   );
 }

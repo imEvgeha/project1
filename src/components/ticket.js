@@ -19,9 +19,9 @@ const Ticket = props => {
     <div className="textOfTicket">
       <b>{textTransformatorInTicket(props.name, 'name')}</b>
       <br></br>
-      <h>{textTransformatorInTicket(props.title, 'title')}</h>
+      <small>{textTransformatorInTicket(props.title, 'title')}</small>
       <p></p>
-      <h>{getInterval(props.timeStamp)}</h>
+      <p>{getInterval(props.timeStamp)}</p>
       {props.child}
     </div>
   );

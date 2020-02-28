@@ -19,7 +19,7 @@ code {
   background-color: thistle;
   border: solid black 1px;
   height: 160px;
-  width: 100px;
+  width: 89%;
   margin: 10px;
   padding: 10px;
 }
@@ -28,7 +28,7 @@ code {
   background-color: rgb(179, 128, 230);
   border: solid black 1px;
   height: 160px;
-  width: 100px;
+  width: 89%;
   margin: 10px;
   padding: 10px;
 }
@@ -38,7 +38,7 @@ code {
   border: solid black 1px;
 
   height: 160px;
-  width: 100px;
+  width: 89%;
   margin: 10px;
   padding: 10px;
 }
@@ -73,23 +73,29 @@ code {
 }
 
 .ButtonsDiv {
-  display: flexbox;
-  align-items: flex-end;
-  flex-direction: column-reverse;
+  display: flex;
+  align-self: flex-end;
 }
 
 .btnRight {
-  width: 100px;
+  width: 50%;
+}
+.btnRightFull {
+  width: 99%;
 }
 .btnLeft {
-  width: 100px;
+  width: 50%;
+}
+.btnLeftFull {
+  width: 99%;
 }
 
 .field {
   position: relative;
   left: 20%;
   content: 'max-content';
-  flex-basis: 27%;
+  flex-basis: 26.5%;
+  max-width: 26.5%;
   border-right: dashed rgb(211, 211, 211) 1px;
   background-color: white;
   display: flex;

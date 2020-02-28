@@ -1,4 +1,5 @@
 import React from 'react';
+import { Droppable } from 'react-beautiful-dnd';
 
 const WorkField = props => {
   return (
@@ -33,30 +34,57 @@ const WorkField = props => {
         </div>
       </div>
       <div className="fields">
-        <div
-          className="field"
-          onDrop={props.onDrop}
-          onDragOver={props.onDragOver}
-          id="repository"
-        >
-          {props.fillingField1}
-        </div>
-        <div
-          className="field"
-          onDrop={props.onDrop}
-          onDragOver={props.onDragOver}
-          id="test"
-        >
-          {props.fillingField2}
-        </div>
-        <div
-          className="field"
-          onDrop={props.onDrop}
-          onDragOver={props.onDragOver}
-          id="ready"
-        >
-          {props.fillingField3}
-        </div>
+        <Droppable droppableId="repository">
+          {(provided, snapshot) => {
+            return (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="field"
+                onDrop={props.onDrop}
+                onDragOver={props.onDragOver}
+                id="repository"
+              >
+                {props.fillingField1}
+                {provided.placeholder}
+              </div>
+            );
+          }}
+        </Droppable>
+        <Droppable droppableId="test">
+          {(provided, snapshot) => {
+            return (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="field"
+                onDrop={props.onDrop}
+                onDragOver={props.onDragOver}
+                id="test"
+              >
+                {props.fillingField2}
+                {provided.placeholder}
+              </div>
+            );
+          }}
+        </Droppable>
+        <Droppable droppableId="ready">
+          {(provided, snapshot) => {
+            return (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="field"
+                onDrop={props.onDrop}
+                onDragOver={props.onDragOver}
+                id="ready"
+              >
+                {props.fillingField3}
+                {provided.placeholder}
+              </div>
+            );
+          }}
+        </Droppable>
       </div>
     </div>
   );
