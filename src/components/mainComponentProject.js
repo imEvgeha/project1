@@ -15,6 +15,7 @@ function MPC() {
   const [ready, setReady] = useState([]);
   const [ticketCopy, setTicketCopy] = useState(null);
   const [clickedOnTicket, setClickedOnTicket] = useState(null);
+  const [draggableOver, setDraggableOver] = useState(false);
 
   useEffect(() => {
     setRepository(JSON.parse(localStorage.getItem('repository')));
@@ -85,6 +86,7 @@ function MPC() {
     return (
       <AddToField
         field={repository}
+        draggableOverHelp={draggableOverHelp}
         divClassName="repository internalProperties"
         handleTicketClick={getInfoAboutTicket}
         btnRightOnClick={moveToTestField}
@@ -97,6 +99,7 @@ function MPC() {
     return (
       <AddToField
         field={test}
+        draggableOverHelp={draggableOverHelp}
         divClassName="fieldTest internalProperties"
         handleTicketClick={getInfoAboutTicket}
         btnRight
@@ -111,6 +114,7 @@ function MPC() {
     return (
       <AddToField
         field={ready}
+        draggableOverHelp={draggableOverHelp}
         divClassName="ready internalProperties"
         handleTicketClick={getInfoAboutTicket}
         btnLeft
@@ -146,13 +150,12 @@ function MPC() {
     setClickedOnTicket(false);
   };
 
-  if (clickedOnTicket) {
-    const elem = document.querySelector('html');
-    elem.classList.add('stopScrolling');
-  } else {
-    const elem = document.querySelector('html');
-    elem.classList.remove('stopScrolling');
-  }
+  const draggableOverHelp = (elem, draggable) => {
+    if (draggable) {
+      setDraggableOver(elem);
+    }
+    return;
+  };
 
   const getTransformField = field => {
     if (field === 'repository') return repository;
@@ -192,7 +195,13 @@ function MPC() {
     }
   };
 
-  console.log(localStorage);
+  if (clickedOnTicket) {
+    const elem = document.querySelector('html');
+    elem.classList.add('stopScrolling');
+  } else {
+    const elem = document.querySelector('html');
+    elem.classList.remove('stopScrolling');
+  }
 
   return (
     <div className="mainDiv">
@@ -221,6 +230,7 @@ function MPC() {
             getDroppableField,
             result.destination.droppableId
           );
+          setDraggableOver(null);
         }}
       >
         <WorkField
@@ -231,6 +241,7 @@ function MPC() {
           fillingField1={addToRepository()}
           fillingField2={addToTestField()}
           fillingField3={addToReadyField()}
+          draggableOverHelp={draggableOver}
         />
         {clickedOnTicket && (
           <TicketInfo

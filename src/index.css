@@ -103,6 +103,19 @@ code {
   flex-direction: column;
 }
 
+.field2 {
+  position: relative;
+  left: 20%;
+  content: 'max-content';
+  flex-basis: 26.5%;
+  max-width: 26.5%;
+  border-right: dashed rgb(211, 211, 211) 1px;
+  background-color: rgb(247, 252, 255);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
 .backgroundInfo {
   z-index: 10;
   display: flex;

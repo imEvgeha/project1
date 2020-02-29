@@ -40,7 +40,9 @@ const WorkField = props => {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="field"
+                className={
+                  props.draggableOverHelp === 'repository' ? 'field2' : 'field'
+                }
                 onDrop={props.onDrop}
                 onDragOver={props.onDragOver}
                 id="repository"
@@ -57,7 +59,9 @@ const WorkField = props => {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="field"
+                className={
+                  props.draggableOverHelp === 'test' ? 'field2' : 'field'
+                }
                 onDrop={props.onDrop}
                 onDragOver={props.onDragOver}
                 id="test"
@@ -74,7 +78,9 @@ const WorkField = props => {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="field"
+                className={
+                  props.draggableOverHelp === 'ready' ? 'field2' : 'field'
+                }
                 onDrop={props.onDrop}
                 onDragOver={props.onDragOver}
                 id="ready"

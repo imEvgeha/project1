@@ -19,6 +19,7 @@ const AddToField = props => {
     return (
       <Draggable key={ticket.id} draggableId={`${ticket.id}`} index={index}>
         {(provided, snapshot) => {
+          props.draggableOverHelp(snapshot.draggingOver, snapshot.isDragging);
           return (
             <div
               ref={provided.innerRef}
