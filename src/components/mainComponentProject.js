@@ -18,10 +18,10 @@ function MPC() {
   const [draggableOver, setDraggableOver] = useState(false);
 
   useEffect(() => {
-    setRepository(JSON.parse(localStorage.getItem('repository')));
-    setTest(JSON.parse(localStorage.getItem('test')));
-    setReady(JSON.parse(localStorage.getItem('ready')));
-    setCount(JSON.parse(localStorage.getItem('count')));
+    setRepository(JSON.parse(localStorage.getItem('repository')) || []);
+    setTest(JSON.parse(localStorage.getItem('test')) || []);
+    setReady(JSON.parse(localStorage.getItem('ready')) || []);
+    setCount(JSON.parse(localStorage.getItem('count')) || 0);
   }, []);
 
   const handleChange = e => {
@@ -88,7 +88,7 @@ function MPC() {
         field={repository}
         draggableOverHelp={draggableOverHelp}
         divClassName="repository internalProperties"
-        handleTicketClick={getInfoAboutTicket}
+        handleTicketClick={openInfoAboutTicket}
         btnRightOnClick={moveToTestField}
         btnRight
       />
@@ -101,7 +101,7 @@ function MPC() {
         field={test}
         draggableOverHelp={draggableOverHelp}
         divClassName="fieldTest internalProperties"
-        handleTicketClick={getInfoAboutTicket}
+        handleTicketClick={openInfoAboutTicket}
         btnRight
         btnRightOnClick={moveToReadyField}
         btnLeft
@@ -116,14 +116,14 @@ function MPC() {
         field={ready}
         draggableOverHelp={draggableOverHelp}
         divClassName="ready internalProperties"
-        handleTicketClick={getInfoAboutTicket}
+        handleTicketClick={openInfoAboutTicket}
         btnLeft
         btnLeftOnClick={moveBackToTestField}
       />
     );
   };
 
-  const getInfoAboutTicket = ticket => {
+  const openInfoAboutTicket = ticket => {
     setClickedOnTicket(true);
     setTicketCopy(ticket);
   };
@@ -133,19 +133,15 @@ function MPC() {
     setTicketCopy(null);
   };
 
-  const findInArr = (field, ticket) => {
-    return field.indexOf(ticket);
-  };
-
   const deleteTicket = ticket => {
     if (ticket.field === 'repository') {
-      repository.splice(findInArr(repository, ticket), 1);
+      setRepository(repository.filter(t => t.id !== ticket.id));
     }
     if (ticket.field === 'test') {
-      test.splice(findInArr(test, ticket), 1);
+      setTest(test.filter(t => t.id !== ticket.id));
     }
     if (ticket.field === 'ready') {
-      ready.splice(findInArr(ready, ticket), 1);
+      setReady(ready.filter(t => t.id !== ticket.id));
     }
     setClickedOnTicket(false);
   };
@@ -158,15 +154,21 @@ function MPC() {
   };
 
   const getTransformField = field => {
-    if (field === 'repository') return repository;
-    if (field === 'test') return test;
-    if (field === 'ready') return ready;
+    const fields = {
+      repository,
+      test,
+      ready
+    };
+    return fields[field];
   };
 
   const getTransformSetField = field => {
-    if (field === 'repository') return setRepository;
-    if (field === 'test') return setTest;
-    if (field === 'ready') return setReady;
+    const fields = {
+      repository: setRepository,
+      test: setTest,
+      ready: setReady
+    };
+    return fields[field];
   };
 
   const onDragEnd = (
