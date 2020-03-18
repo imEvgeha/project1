@@ -19,10 +19,11 @@ code {
   width: 89%;
   margin: 10px;
   padding: 10px;
-  transition: 320ms ease;
+  transition: 220ms ease;
 }
 .repository:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
+  background-color: rgb(214, 180, 214);
 }
 
 .fieldTest {
@@ -32,10 +33,11 @@ code {
   width: 89%;
   margin: 10px;
   padding: 10px;
-  transition: 320ms ease;
+  transition: 220ms ease;
 }
 .fieldTest:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
+  background-color: rgb(170, 117, 223);
 }
 
 .ready {
@@ -45,10 +47,11 @@ code {
   width: 89%;
   margin: 10px;
   padding: 10px;
-  transition: 320ms ease;
+  transition: 220ms ease;
 }
 .ready:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
+  background-color: rgb(253, 91, 62);
 }
 
 .mainDiv {
