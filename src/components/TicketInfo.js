@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import getInterval from '../helpers/getInterval';
 
-const TicketInfo = props => {
+const TicketInfo = (props) => {
   const [_state, setState] = useState({});
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const TicketInfo = props => {
     };
   }, []);
 
-  const getStatus = status => {
+  const getStatus = (status) => {
     if (status === 'repository') {
       return 'In developing...';
     }
@@ -29,7 +29,7 @@ const TicketInfo = props => {
   return (
     <div
       className="backgroundInfo"
-      onClick={e => {
+      onClick={(e) => {
         if (e.target.className === 'backgroundInfo') {
           props.closeInfo();
         }
@@ -38,7 +38,7 @@ const TicketInfo = props => {
       <div className="info">
         <b>Name: {props.name}</b>
         <br></br>
-        <h>Title: {props.title}</h>
+        <p>Title: {props.title}</p>
         <br></br>
         <h3>Creating time: {getInterval(props.timeStamp)}</h3>
         <br></br>

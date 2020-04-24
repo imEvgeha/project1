@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import getInterval from '../helpers/getInterval';
 import textTransformatorInTicket from '../helpers/textTransformatorInTicket';
 
-const Ticket = props => {
+const Ticket = (props) => {
   const [_state, setState] = useState({});
 
   useEffect(() => {

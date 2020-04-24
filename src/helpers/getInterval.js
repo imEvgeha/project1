@@ -1,6 +1,6 @@
 import { DateTime, Interval } from 'luxon';
 
-const getInterval = then => {
+const getInterval = (then) => {
   let date = DateTime.local();
   const dateTimeThen = DateTime.fromMillis(then);
   let i = Interval.fromDateTimes(dateTimeThen, date);
@@ -54,6 +54,9 @@ const getInterval = then => {
   }
   if (i.length('mounts', true) < 1) {
     return 'Less than a one mounts ago.';
+  }
+  if (i.length('mounts', true) < 3) {
+    return 'Less than a one year ago.';
   } else {
     return 'TIME ERROR';
   }

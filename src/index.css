@@ -168,3 +168,14 @@ code {
   display: flex;
   text-align: center;
 }
+
+.HelperDiv {
+  background-color: wheat;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 10;
+  height: 200px;
+  width: 100px;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 
-const WorkField = props => {
+const WorkField = (props) => {
   return (
     <div className="mainComponent">
       <div className="inputFields">
@@ -16,6 +16,7 @@ const WorkField = props => {
                 onChange={props.handleChange}
                 value={props.name}
                 name="name"
+                autocomplete="off"
               ></input>
             </b>
             <br></br>
@@ -26,6 +27,7 @@ const WorkField = props => {
                 onChange={props.handleChange}
                 value={props.title}
                 name="title"
+                autocomplete="off"
               ></input>
             </b>
             <br></br>
@@ -47,6 +49,12 @@ const WorkField = props => {
                 onDragOver={props.onDragOver}
                 id="repository"
               >
+                {props.repositoryLoaded ? null : (
+                  <img
+                    src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"
+                    alt="loading..."
+                  ></img>
+                )}
                 {props.fillingField1}
                 {provided.placeholder}
               </div>
@@ -66,6 +74,12 @@ const WorkField = props => {
                 onDragOver={props.onDragOver}
                 id="test"
               >
+                {props.testLoaded ? null : (
+                  <img
+                    src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"
+                    alt="loading..."
+                  ></img>
+                )}
                 {props.fillingField2}
                 {provided.placeholder}
               </div>
@@ -85,6 +99,12 @@ const WorkField = props => {
                 onDragOver={props.onDragOver}
                 id="ready"
               >
+                {props.readyLoaded ? null : (
+                  <img
+                    src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"
+                    alt="loading..."
+                  ></img>
+                )}
                 {props.fillingField3}
                 {provided.placeholder}
               </div>

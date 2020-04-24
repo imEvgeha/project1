@@ -2,7 +2,7 @@ import React from 'react';
 import TicketComponent from './ticket';
 import { Draggable } from 'react-beautiful-dnd';
 
-const getStatus = status => {
+const getStatus = (status) => {
   if (status === 'repository') {
     return 'In developing...';
   }
@@ -14,7 +14,7 @@ const getStatus = status => {
   }
 };
 
-const AddToField = props => {
+const AddToField = (props) => {
   return props.field.map((ticket, index) => {
     return (
       <Draggable key={ticket.id} draggableId={`${ticket.id}`} index={index}>
@@ -25,7 +25,7 @@ const AddToField = props => {
               ref={provided.innerRef}
               id={ticket.id}
               className={props.divClassName}
-              onClick={e => {
+              onClick={(e) => {
                 if (e.target.tagName !== 'BUTTON')
                   props.handleTicketClick(ticket);
               }}
