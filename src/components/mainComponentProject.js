@@ -48,8 +48,6 @@ function MPC() {
   const handleSubmit = (e) => {
     e.preventDefault();
     let fireRepository = null;
-    let fireTest = null;
-    let fireReady = null;
     let fireCount = null;
     let timeStamp = new Date().getTime();
 
@@ -67,29 +65,22 @@ function MPC() {
 
     dbRef.on('value', (snap) => {
       fireRepository = snap.val().repository || [];
-      fireTest = snap.val().test || [];
-      fireReady = snap.val().ready || [];
       fireCount = snap.val().count || 0;
     });
 
-    fire
-      .database()
-      .ref()
-      .set({
-        repository: [
-          ...fireRepository,
-          {
-            name: name,
-            title: title,
-            timeStamp,
-            id: count,
-            field: 'repository',
-          },
-        ],
-        test: fireTest,
-        ready: fireReady,
-        count: fireCount + 1,
-      });
+    dbRef.update({
+      repository: [
+        ...fireRepository,
+        {
+          name: name,
+          title: title,
+          timeStamp,
+          id: count,
+          field: 'repository',
+        },
+      ],
+      count: fireCount + 1,
+    });
   };
 
   const setElemToFirebase = (
@@ -130,6 +121,7 @@ function MPC() {
       installAllElements();
       return;
     }
+
     if (destinationColumnName === 'test') {
       dbRef.on('value', (snap) => {
         fireRepository = snap.val().repository || [];
@@ -152,6 +144,7 @@ function MPC() {
       installAllElements();
       return;
     }
+
     if (destinationColumnName === 'ready') {
       dbRef.on('value', (snap) => {
         fireRepository = snap.val().repository || [];
