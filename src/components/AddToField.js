@@ -42,7 +42,7 @@ const AddToField = (props) => {
                 {props.btnLeft ? (
                   <button
                     onClick={() => {
-                      props.btnLeftOnClick(ticket.id);
+                      return;
                     }}
                     className={props.btnRight ? 'btnLeft' : 'btnLeftFull'}
                   >
@@ -52,7 +52,7 @@ const AddToField = (props) => {
                 {props.btnRight ? (
                   <button
                     onClick={() => {
-                      props.btnRightOnClick(ticket.id);
+                      return;
                     }}
                     className={props.btnLeft ? 'btnRight' : 'btnRightFull'}
                   >
