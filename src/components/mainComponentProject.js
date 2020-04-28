@@ -23,15 +23,7 @@ function MPC() {
   const dbRef = fire.database().ref();
 
   useEffect(() => {
-    dbRef.on('value', (snap) => {
-      setRepository(snap.val().repository || []);
-      setRepositoryLoaded(true);
-      setTest(snap.val().test || []);
-      setTestLoaded(true);
-      setReady(snap.val().ready || []);
-      setReadyLoaded(true);
-      setCount(snap.val().count);
-    });
+    installAllElements();
   }, []);
 
   const handleChange = (e) => {
@@ -86,11 +78,7 @@ function MPC() {
   const setElemToFirebase = (
     destinationColumnName,
     sourceColumnName,
-    where,
-    source,
     elem,
-    setNew,
-    setOld,
     id
   ) => {
     let fireRepository = null;
@@ -117,8 +105,6 @@ function MPC() {
           ready: fireReady.filter((t) => t.id !== id),
           count: fireCount,
         });
-      MoveTo(id, source, where, setNew, setOld);
-      installAllElements();
       return;
     }
 
@@ -140,8 +126,6 @@ function MPC() {
           ready: fireReady.filter((t) => t.id !== id),
           count: fireCount,
         });
-      MoveTo(id, source, where, setNew, setOld);
-      installAllElements();
       return;
     }
 
@@ -163,10 +147,11 @@ function MPC() {
           ready: [...fireReady, elem],
           count: fireCount,
         });
-      MoveTo(id, source, where, setNew, setOld);
-      installAllElements();
-      return;
     }
+  };
+
+  const downloadAllElements = () => {
+    installAllElements();
   };
 
   const installAllElements = () => {
@@ -229,24 +214,28 @@ function MPC() {
   };
 
   const deleteTicket = (ticket) => {
-    if (ticket.field === 'repository') {
-      dbRef.update({
-        repository: repository.filter((t) => t.id !== ticket.id),
-        count: count > 0 ? count - 1 : count,
-      });
-    }
-    if (ticket.field === 'test') {
-      dbRef.update({
-        test: test.filter((t) => t.id !== ticket.id),
-        count: count > 0 ? count - 1 : count,
-      });
-    }
-    if (ticket.field === 'ready') {
-      dbRef.update({
-        ready: ready.filter((t) => t.id !== ticket.id),
-        count: count > 0 ? count - 1 : count,
-      });
-    }
+    const variants = {
+      repository: () => {
+        dbRef.update({
+          repository: repository.filter((t) => t.id !== ticket.id),
+          count: count > 0 ? count - 1 : count,
+        });
+      },
+      test: () => {
+        dbRef.update({
+          test: test.filter((t) => t.id !== ticket.id),
+          count: count > 0 ? count - 1 : count,
+        });
+      },
+      ready: () => {
+        dbRef.update({
+          ready: ready.filter((t) => t.id !== ticket.id),
+          count: count > 0 ? count - 1 : count,
+        });
+      },
+    };
+
+    variants[ticket.field]();
     setClickedOnTicket(false);
   };
 
@@ -290,16 +279,7 @@ function MPC() {
           if (!result.destination) return;
           if (!result.source) return;
 
-          const getDroppableField = getTransformField(
-            result.destination.droppableId
-          );
-          const setDroppableField = getTransformSetField(
-            result.destination.droppableId
-          );
           const getOldDroppableField = getTransformField(
-            result.source.droppableId
-          );
-          const oldSetDroppableField = getTransformSetField(
             result.source.droppableId
           );
           const sourceIndex = result.source.index;
@@ -310,13 +290,10 @@ function MPC() {
           setElemToFirebase(
             destinationColumnName,
             sourceColumnName,
-            getDroppableField,
-            getOldDroppableField,
             draggableElem,
-            setDroppableField,
-            oldSetDroppableField,
             draggableElem.id
           );
+          downloadAllElements();
           setDraggableOver(null);
         }}
       >
