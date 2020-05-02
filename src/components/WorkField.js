@@ -1,7 +1,54 @@
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
+import AddToField from './AddToField';
 
 const WorkField = (props) => {
+  const {
+    repository,
+    test,
+    ready,
+    draggableOverHelp,
+    openInfoAboutTicket,
+    draggableOver,
+  } = props;
+
+  const addToRepository = () => {
+    return (
+      <AddToField
+        field={repository}
+        draggableOverHelp={draggableOverHelp}
+        divClassName="repository internalProperties"
+        handleTicketClick={openInfoAboutTicket}
+        btnRight
+      />
+    );
+  };
+
+  const addToTestField = () => {
+    return (
+      <AddToField
+        field={test}
+        draggableOverHelp={draggableOverHelp}
+        divClassName="fieldTest internalProperties"
+        handleTicketClick={openInfoAboutTicket}
+        btnRight
+        btnLeft
+      />
+    );
+  };
+
+  const addToReadyField = () => {
+    return (
+      <AddToField
+        field={ready}
+        draggableOverHelp={draggableOverHelp}
+        divClassName="ready internalProperties"
+        handleTicketClick={openInfoAboutTicket}
+        btnLeft
+      />
+    );
+  };
+
   return (
     <div className="mainComponent">
       <div className="inputFields">
@@ -13,7 +60,13 @@ const WorkField = (props) => {
               Name:
               <input
                 type="text"
-                onChange={props.handleChange}
+                onChange={(e) =>
+                  props.dispatch({
+                    type: 'value',
+                    field: 'name',
+                    value: e.target.value,
+                  })
+                }
                 value={props.name}
                 name="name"
                 autocomplete="off"
@@ -24,7 +77,13 @@ const WorkField = (props) => {
               Title:
               <input
                 type="text"
-                onChange={props.handleChange}
+                onChange={(e) =>
+                  props.dispatch({
+                    type: 'value',
+                    field: 'title',
+                    value: e.target.value,
+                  })
+                }
                 value={props.title}
                 name="title"
                 autocomplete="off"
@@ -42,9 +101,7 @@ const WorkField = (props) => {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={
-                  props.draggableOverHelp === 'repository' ? 'field2' : 'field'
-                }
+                className={draggableOver === 'repository' ? 'field2' : 'field'}
                 onDrop={props.onDrop}
                 onDragOver={props.onDragOver}
                 id="repository"
@@ -55,7 +112,7 @@ const WorkField = (props) => {
                     alt="loading..."
                   ></img>
                 )}
-                {props.fillingField1}
+                {addToRepository()}
                 {provided.placeholder}
               </div>
             );
@@ -67,9 +124,7 @@ const WorkField = (props) => {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={
-                  props.draggableOverHelp === 'test' ? 'field2' : 'field'
-                }
+                className={draggableOver === 'test' ? 'field2' : 'field'}
                 onDrop={props.onDrop}
                 onDragOver={props.onDragOver}
                 id="test"
@@ -80,7 +135,7 @@ const WorkField = (props) => {
                     alt="loading..."
                   ></img>
                 )}
-                {props.fillingField2}
+                {addToTestField()}
                 {provided.placeholder}
               </div>
             );
@@ -92,9 +147,7 @@ const WorkField = (props) => {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={
-                  props.draggableOverHelp === 'ready' ? 'field2' : 'field'
-                }
+                className={draggableOver === 'ready' ? 'field2' : 'field'}
                 onDrop={props.onDrop}
                 onDragOver={props.onDragOver}
                 id="ready"
@@ -105,7 +158,7 @@ const WorkField = (props) => {
                     alt="loading..."
                   ></img>
                 )}
-                {props.fillingField3}
+                {addToReadyField()}
                 {provided.placeholder}
               </div>
             );

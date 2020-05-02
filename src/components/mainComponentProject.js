@@ -1,41 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import MoveTo from '../helpers/MoveTo';
-import AddToField from './AddToField';
+import React, { useEffect, useReducer } from 'react';
 import WorkField from './WorkField';
 import TicketInfo from './TicketInfo';
 import { DragDropContext } from 'react-beautiful-dnd';
 import fire from '../fire';
+import reducer from '../reducer';
+
+const LIMIT_AMOUNT_TICKETS = 4;
 
 function MPC() {
   // * MCP - Main Project Component
-  const [name, setName] = useState('');
-  const [title, setTitle] = useState('');
-  const [count, setCount] = useState(0);
-  const [repository, setRepository] = useState([]);
-  const [test, setTest] = useState([]);
-  const [ready, setReady] = useState([]);
-  const [ticketCopy, setTicketCopy] = useState(null);
-  const [clickedOnTicket, setClickedOnTicket] = useState(null);
-  const [draggableOver, setDraggableOver] = useState(false);
-  const [repositoryLoaded, setRepositoryLoaded] = useState(false);
-  const [testLoaded, setTestLoaded] = useState(false);
-  const [readyLoaded, setReadyLoaded] = useState(false);
+  const initialState = {
+    name: '',
+    title: '',
+    count: 0,
+    repository: [],
+    test: [],
+    ready: [],
+    ticketCopy: null,
+    clickedOnTicket: null,
+    repositoryLoaded: false,
+    testLoaded: false,
+    readyLoaded: false,
+  };
+
+  const [state, dispatch] = useReducer(reducer, initialState);
   const dbRef = fire.database().ref();
+  let draggableOver = null;
+
+  const {
+    name,
+    title,
+    count,
+    repository,
+    test,
+    ready,
+    ticketCopy,
+    clickedOnTicket,
+    repositoryLoaded,
+    testLoaded,
+    readyLoaded,
+  } = state;
 
   useEffect(() => {
     installAllElements();
   }, []);
-
-  const handleChange = (e) => {
-    const value = e.target.value;
-    const name = e.target.name;
-    if (name === 'name') {
-      setName(value);
-    }
-    if (name === 'title') {
-      setTitle(value);
-    }
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,16 +52,14 @@ function MPC() {
     let timeStamp = new Date().getTime();
 
     if (name === '') {
-      setTitle(title);
       alert('ERROR - Name field is required');
       return;
     }
-    if (repository.length === 4) {
+    if (repository.length === LIMIT_AMOUNT_TICKETS) {
       return;
     }
-    setCount(count + 1);
-    setName('');
-    setTitle('');
+    dispatch({ type: 'value', field: 'name', value: '' });
+    dispatch({ type: 'value', field: 'title', value: '' });
 
     dbRef.on('value', (snap) => {
       fireRepository = snap.val().repository || [];
@@ -86,67 +92,56 @@ function MPC() {
     let fireReady = null;
     let fireCount = null;
 
+    const fillAllFireVariables = (snap) => {
+      fireRepository = snap.val().repository || [];
+      fireTest = snap.val().test || [];
+      fireReady = snap.val().ready || [];
+      fireCount = snap.val().count || 0;
+    };
+
     if (destinationColumnName === sourceColumnName) return;
     if (destinationColumnName === 'repository') {
       dbRef.on('value', (snap) => {
-        fireRepository = snap.val().repository || [];
-        fireTest = snap.val().test || [];
-        fireReady = snap.val().ready || [];
-        fireCount = snap.val().count || 0;
+        fillAllFireVariables(snap);
       });
       elem.field = 'repository';
 
-      fire
-        .database()
-        .ref()
-        .set({
-          repository: [...fireRepository, elem],
-          test: fireTest.filter((t) => t.id !== id),
-          ready: fireReady.filter((t) => t.id !== id),
-          count: fireCount,
-        });
+      dbRef.set({
+        repository: [...fireRepository, elem],
+        test: fireTest.filter((t) => t.id !== id),
+        ready: fireReady.filter((t) => t.id !== id),
+        count: fireCount,
+      });
       return;
     }
 
     if (destinationColumnName === 'test') {
       dbRef.on('value', (snap) => {
-        fireRepository = snap.val().repository || [];
-        fireTest = snap.val().test || [];
-        fireReady = snap.val().ready || [];
-        fireCount = snap.val().count || 0;
+        fillAllFireVariables(snap);
       });
       elem.field = 'test';
 
-      fire
-        .database()
-        .ref()
-        .set({
-          repository: fireRepository.filter((t) => t.id !== id),
-          test: [...fireTest, elem],
-          ready: fireReady.filter((t) => t.id !== id),
-          count: fireCount,
-        });
+      dbRef.set({
+        repository: fireRepository.filter((t) => t.id !== id),
+        test: [...fireTest, elem],
+        ready: fireReady.filter((t) => t.id !== id),
+        count: fireCount,
+      });
       return;
     }
 
     if (destinationColumnName === 'ready') {
       dbRef.on('value', (snap) => {
-        fireRepository = snap.val().repository || [];
-        fireTest = snap.val().test || [];
-        fireReady = snap.val().ready || [];
-        fireCount = snap.val().count || 0;
+        fillAllFireVariables(snap);
       });
       elem.field = 'ready';
 
-      fire
-        .database()
-        .ref()
-        .set({
-          repository: fireRepository.filter((t) => t.id !== id),
-          test: fireTest.filter((t) => t.id !== id),
-          ready: [...fireReady, elem],
-          count: fireCount,
-        });
+      dbRef.set({
+        repository: fireRepository.filter((t) => t.id !== id),
+        test: fireTest.filter((t) => t.id !== id),
+        ready: [...fireReady, elem],
+        count: fireCount,
+      });
     }
   };
 
@@ -156,61 +151,36 @@ function MPC() {
 
   const installAllElements = () => {
     dbRef.on('value', (snap) => {
-      setRepository(snap.val().repository || []);
-      setRepositoryLoaded(true);
-      setTest(snap.val().test || []);
-      setTestLoaded(true);
-      setReady(snap.val().ready || []);
-      setReadyLoaded(true);
-      setCount(snap.val().count);
+      dispatch({
+        type: 'value',
+        field: 'repository',
+        value: snap.val().repository || [],
+      });
+      dispatch({ type: 'value', field: 'repositoryLoaded', value: true });
+      dispatch({
+        type: 'value',
+        field: 'test',
+        value: snap.val().test || [],
+      });
+      dispatch({ type: 'value', field: 'testLoaded', value: true });
+      dispatch({
+        type: 'value',
+        field: 'ready',
+        value: snap.val().ready || [],
+      });
+      dispatch({ type: 'value', field: 'readyLoaded', value: true });
+      dispatch({ type: 'count', value: snap.val().count });
     });
   };
 
-  const addToRepository = () => {
-    return (
-      <AddToField
-        field={repository}
-        draggableOverHelp={draggableOverHelp}
-        divClassName="repository internalProperties"
-        handleTicketClick={openInfoAboutTicket}
-        btnRight
-      />
-    );
-  };
-
-  const addToTestField = () => {
-    return (
-      <AddToField
-        field={test}
-        draggableOverHelp={draggableOverHelp}
-        divClassName="fieldTest internalProperties"
-        handleTicketClick={openInfoAboutTicket}
-        btnRight
-        btnLeft
-      />
-    );
-  };
-
-  const addToReadyField = () => {
-    return (
-      <AddToField
-        field={ready}
-        draggableOverHelp={draggableOverHelp}
-        divClassName="ready internalProperties"
-        handleTicketClick={openInfoAboutTicket}
-        btnLeft
-      />
-    );
-  };
-
   const openInfoAboutTicket = (ticket) => {
-    setClickedOnTicket(true);
-    setTicketCopy(ticket);
+    dispatch({ type: 'clickedOnTicket', value: true });
+    dispatch({ type: 'ticketCopy', value: ticket });
   };
 
   const closeInfoAboutTicket = () => {
-    setClickedOnTicket(false);
-    setTicketCopy(null);
+    dispatch({ type: 'clickedOnTicket', value: false });
+    dispatch({ type: 'ticketCopy', value: null });
   };
 
   const deleteTicket = (ticket) => {
@@ -236,14 +206,11 @@ function MPC() {
     };
 
     variants[ticket.field]();
-    setClickedOnTicket(false);
+    dispatch({ type: 'clickedOnTicket', value: false });
   };
 
   const draggableOverHelp = (elem, draggable) => {
-    if (draggable) {
-      setDraggableOver(elem);
-    }
-    return;
+    draggable ? (draggableOver = elem) : (draggableOver = null);
   };
 
   const getTransformField = (field) => {
@@ -251,15 +218,6 @@ function MPC() {
       repository,
       test,
       ready,
-    };
-    return fields[field];
-  };
-
-  const getTransformSetField = (field) => {
-    const fields = {
-      repository: setRepository,
-      test: setTest,
-      ready: setReady,
     };
     return fields[field];
   };
@@ -293,19 +251,22 @@ function MPC() {
             draggableElem,
             draggableElem.id
           );
+
           downloadAllElements();
-          setDraggableOver(null);
+          draggableOver = null;
         }}
       >
         <WorkField
-          handleChange={handleChange}
+          dispatch={dispatch}
           handleSubmit={handleSubmit}
           name={name}
           title={title}
-          fillingField1={addToRepository()}
-          fillingField2={addToTestField()}
-          fillingField3={addToReadyField()}
-          draggableOverHelp={draggableOver}
+          repository={repository}
+          test={test}
+          ready={ready}
+          openInfoAboutTicket={openInfoAboutTicket}
+          draggableOverHelp={draggableOverHelp}
+          draggableOver={draggableOver}
           repositoryLoaded={repositoryLoaded}
           testLoaded={testLoaded}
           readyLoaded={readyLoaded}
